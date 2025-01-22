@@ -60,17 +60,17 @@ export default function AssignmentEditor() {
             <input type="checkbox" name="check-entry" id="wd-text-entry"/>
             <label htmlFor="wd-text-entry">Text Entry</label><br/>
 
-            <input type="checkbox" name="check-entry" id="wd-text-entry"/>
-            <label htmlFor="wd-text-entry">Website URL</label><br/>
+            <input type="checkbox" name="check-entry" id="wd-website-url"/>
+            <label htmlFor="wd-website-url">Website URL</label><br/>
 
-            <input type="checkbox" name="check-entry" id="wd-text-entry"/>
-            <label htmlFor="wd-text-entry">Media Recordings</label><br/>
+            <input type="checkbox" name="check-entry" id="wd-media-recordings"/>
+            <label htmlFor="wd-media-recordings">Media Recordings</label><br/>
 
-            <input type="checkbox" name="check-entry" id="wd-text-entry"/>
-            <label htmlFor="wd-text-entry">Student Annotation</label><br/>
+            <input type="checkbox" name="check-entry" id="wd-student-annotation"/>
+            <label htmlFor="wd-student-annotation">Student Annotation</label><br/>
 
-            <input type="checkbox" name="check-entry" id="wd-text-entry"/>
-            <label htmlFor="wd-text-entry">File Uploads</label>
+            <input type="checkbox" name="check-entry" id="wd-file-upload"/>
+            <label htmlFor="wd-file-upload">File Uploads</label>
           </td>
         </tr>
         <tr>
