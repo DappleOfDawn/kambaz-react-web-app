@@ -4,6 +4,11 @@ import Modules from "./Modules";
 import Home from "./Home";
 import Assignments from "./Assignments";
 import AssignmentEditor from "./Assignments/Editor";
+import Grades from "./Grades";
+import People from "./People";
+import Quizzes from "./Quizzes";
+import Zoom from "./Zoom";
+import Piazza from "./Piazza";
 
 export default function Courses() {
   return (
@@ -22,7 +27,11 @@ export default function Courses() {
               <Route path="Modules" element={<Modules />} />
               <Route path="Assignments" element={<Assignments />} />
               <Route path="Assignments/:aid" element={<AssignmentEditor />} />
-              <Route path="People" element={<h2>People</h2>} />
+              <Route path="People" element={<People />} />
+              <Route path="Grades" element={<Grades />} />
+              <Route path="Quizzes" element={<Quizzes />} />
+              <Route path="Zoom" element={<Zoom />} />
+              <Route path="Piazza" element={<Piazza />} />
             </Routes>
           </td>
         </tr>

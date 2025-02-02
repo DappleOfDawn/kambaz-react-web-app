@@ -220,7 +220,7 @@ tag to tell browsers to render the gaps.
       to get dummy text<br/>
       <h1>TODO: ADD GITHUB LINK HERE</h1>
       Please
-      <a href="https://www.lipsum.com" id="wd-github">click here</a>
+      <a href="https://github.com/DappleOfDawn/kambaz-react-web-app" id="wd-github">click here</a>
       to visit my github repo<br/>
 
 
