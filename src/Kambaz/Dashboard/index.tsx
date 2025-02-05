@@ -1,95 +1,112 @@
+import { Button, Card, Col, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   return (
     <div id="wd-dashboard">
       <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-      <h2 id="wd-dashboard-published">Published Courses (12)</h2> <hr />
+      <h2 id="wd-dashboard-published">Published Courses (7)</h2> <hr />
       <div id="wd-dashboard-courses">
-        <div className="wd-dashboard-course">
-          <Link to="/Kambaz/Courses/1234/Home"
-                className="wd-dashboard-course-link" >
-            <img src="/images/reactjs.jpg" width={200} />
-            <div>
-              <h5> CS1234 React JS </h5>
-              <p className="wd-dashboard-course-title">
-                Full Stack software developer  </p>
-              <button> Go </button>
-            </div>
-          </Link>
-        </div>
-        <div className="wd-dashboard-course">
-          <Link to="/Kambaz/Courses/1235/Home"
-                className="wd-dashboard-course-link" >
-            <img src="/images/celebi.jpg" width={200} />
-            <div>
-              <h5> CS1235 Time Travel </h5>
-              <p className="wd-dashboard-course-title">
-                Time Travel With Celebi  </p>
-              <button> Go </button>
-            </div>
-          </Link>
-        </div>
-        <div className="wd-dashboard-course">
-          <Link to="/Kambaz/Courses/1236/Home"
-                className="wd-dashboard-course-link" >
-            <img src="/images/flowers.png" width={200} />
-            <div>
-              <h5> CS1236 Interpreting Textures </h5>
-              <p className="wd-dashboard-course-title">
-                Who took my flower texture?!  </p>
-              <button> Go </button>
-            </div>
-          </Link>
-        </div>
-        <div className="wd-dashboard-course">
-          <Link to="/Kambaz/Courses/1237/Home"
-                className="wd-dashboard-course-link" >
-            <img src="/images/graph.png" width={200} />
-            <div>
-              <h5> CS1237 Graphing Pain </h5>
-              <p className="wd-dashboard-course-title">
-                Representing your pain with graphs  </p>
-              <button> Go </button>
-            </div>
-          </Link>
-        </div>
-        <div className="wd-dashboard-course">
-          <Link to="/Kambaz/Courses/1238/Home"
-                className="wd-dashboard-course-link" >
-            <img src="/images/progress.png" width={200} />
-            <div>
-              <h5> CS1238 Intro to BGDC </h5>
-              <p className="wd-dashboard-course-title">
-                Introduction to Being Gay and Doing Crime  </p>
-              <button> Go </button>
-            </div>
-          </Link>
-        </div>
-        <div className="wd-dashboard-course">
-          <Link to="/Kambaz/Courses/1239/Home"
-                className="wd-dashboard-course-link" >
-            <img src="/images/ravenclaw.png" width={200} />
-            <div>
-              <h5> CS1239 Ravenclawing </h5>
-              <p className="wd-dashboard-course-title">
-                How to Raven your Claws  </p>
-              <button> Go </button>
-            </div>
-          </Link>
-        </div>
-        <div className="wd-dashboard-course">
-          <Link to="/Kambaz/Courses/1240/Home"
-                className="wd-dashboard-course-link" >
-            <img src="/images/tfmlogo.png" width={200} />
-            <div>
-              <h5> CS1240 TFM </h5>
-              <p className="wd-dashboard-course-title">
-                Transformation, Fitness, and Movement  </p>
-              <button> Go </button>
-            </div>
-          </Link>
-        </div>
+        <Row xs={1} md={5} className="g-4">
+          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
+            <Card>
+              <Link to="/Kambaz/Courses/1234/Home"
+                    className="wd-dashboard-course-link text-decoration-none text-dark">
+                <Card.Img variant="top" src="/images/reactjs.jpg" width={270} />
+                <Card.Body>
+                  <Card.Title> CS1234 React JS </Card.Title>
+                  <Card.Text className="wd-dashboard-course-title">
+                    Full Stack software developer  </Card.Text>
+                  <Button variant="primary"> Go </Button>
+                </Card.Body>
+              </Link>
+            </Card>
+          </Col>
+          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
+            <Card>
+              <Link to="/Kambaz/Courses/1235/Home"
+                    className="wd-dashboard-course-link text-decoration-none text-dark">
+                <Card.Img variant="top" src="/images/celebi.jpg" width={270} />
+                <Card.Body>
+                  <Card.Title> CS1235 Time Travel </Card.Title>
+                  <Card.Text className="wd-dashboard-course-title">
+                    Time Travel With Celebi  </Card.Text>
+                  <Button variant="primary"> Go </Button>
+                </Card.Body>
+              </Link>
+            </Card>
+          </Col>
+          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
+            <Card>
+              <Link to="/Kambaz/Courses/1236/Home"
+                    className="wd-dashboard-course-link text-decoration-none text-dark">
+                <Card.Img variant="top" src="/images/flowers.png" width={270} />
+                <Card.Body>
+                  <Card.Title> CS1236 Interpreting Textures </Card.Title>
+                  <Card.Text className="wd-dashboard-course-title">
+                    Who took my flower texture?!  </Card.Text>
+                  <Button variant="primary"> Go </Button>
+                </Card.Body>
+              </Link>
+            </Card>
+          </Col>
+          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
+            <Card>
+              <Link to="/Kambaz/Courses/1237/Home"
+                    className="wd-dashboard-course-link text-decoration-none text-dark">
+                <Card.Img variant="top" src="/images/graph.png" width={270} />
+                <Card.Body>
+                  <Card.Title> CS1237 Graphing Pain </Card.Title>
+                  <Card.Text className="wd-dashboard-course-title">
+                    Representing your pain with graphs  </Card.Text>
+                  <Button variant="primary"> Go </Button>
+                </Card.Body>
+              </Link>
+            </Card>
+          </Col>
+          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
+            <Card>
+              <Link to="/Kambaz/Courses/1238/Home"
+                    className="wd-dashboard-course-link text-decoration-none text-dark">
+                <Card.Img variant="top" src="/images/progress.png" width={270} />
+                <Card.Body>
+                  <Card.Title> CS1238 Intro to BGDC </Card.Title>
+                  <Card.Text className="wd-dashboard-course-title">
+                    Introduction to Being Gay and Doing Crime  </Card.Text>
+                  <Button variant="primary"> Go </Button>
+                </Card.Body>
+              </Link>
+            </Card>
+          </Col>
+          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
+            <Card>
+              <Link to="/Kambaz/Courses/1239/Home"
+                    className="wd-dashboard-course-link text-decoration-none text-dark">
+                <Card.Img variant="top" src="/images/ravenclaw.png" width={270} />
+                <Card.Body>
+                  <Card.Title> CS1239 Ravenclawing </Card.Title>
+                  <Card.Text className="wd-dashboard-course-title">
+                    How to Raven your Claws  </Card.Text>
+                  <Button variant="primary"> Go </Button>
+                </Card.Body>
+              </Link>
+            </Card>
+          </Col>
+          <Col className="wd-dashboard-course" style={{ width: "300px" }}>
+            <Card>
+              <Link to="/Kambaz/Courses/1240/Home"
+                    className="wd-dashboard-course-link text-decoration-none text-dark">
+                <Card.Img variant="top" src="/images/tfmlogo.png" width={270} />
+                <Card.Body>
+                  <Card.Title> CS1240 TFM </Card.Title>
+                  <Card.Text className="wd-dashboard-course-title">
+                    Transformation, Fitness, and Movement  </Card.Text>
+                  <Button variant="primary"> Go </Button>
+                </Card.Body>
+              </Link>
+            </Card>
+          </Col>
+        </Row>
       </div>
     </div>
 );}

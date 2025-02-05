@@ -1,88 +1,168 @@
+import { Button, Col, ListGroup, Row } from "react-bootstrap";
+import AssignmentsControls from "./AssignmentsControls";
+import { BsGripVertical } from "react-icons/bs";
+import AssignCatControlButtons from "./AssignCatControlButtons";
+import AssgnControlButtons from "./AssgnControlButtons";
+import { LuNotebookPen } from "react-icons/lu";
+
 export default function Assignments() {
   return (
-    <div id="wd-assignments">
-      <input placeholder="Search for Assignments"
-             id="wd-search-assignment" />
-      <button id="wd-add-assignment-group">+ Group</button>
-      <button id="wd-add-assignment">+ Assignment</button>
-      <h3 id="wd-assignments-title">
-        ASSIGNMENTS 40% of Total <button>+</button> </h3>
-      <ul id="wd-assignment-list">
-        <li className="wd-assignment-list-item">
-          <a href="#/Kambaz/Courses/1234/Assignments/123"
-             className="wd-assignment-link" >
-            A1 - ENV + HTML
-          </a><br/>
-          Multiple Modules | <b>Not available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100pts
-        </li>
-        <li className="wd-assignment-list-item">
-          <a href="#/Kambaz/Courses/1234/Assignments/124"
-             className="wd-assignment-link" >
-            A2 - CSS + BOOTSTRAP
-          </a><br/>
-          Multiple Modules | <b>Not available until</b> May 13 at 12:00am | <b>Due</b> May 20 at 11:59pm | 100pts
-        </li>
-        <li className="wd-assignment-list-item">
-          <a href="#/Kambaz/Courses/1234/Assignments/125"
-             className="wd-assignment-link" >
-            A3 - JAVASCRIPT + REACT
-          </a><br/>
-          Multiple Modules | <b>Not available until</b> May 20 at 12:00am | <b>Due</b> May 27 at 11:59pm | 100pts
-        </li>
-      </ul>
-      <h3 id="wd-assignments-title">
-        QUIZZES 10% of Total <button>+</button> </h3>
-      <ul id="wd-assignment-list">
-        <li className="wd-assignment-list-item">
-          <a href="#/Kambaz/Courses/1234/Assignments/133"
-             className="wd-assignment-link" >
-            Q1 - ENV + HTML
-          </a><br/>
-          <b>Not available until</b> May 7 at 12:00am | <b>Due</b> May 14 at 11:59pm | 25pts
-        </li>
-        <li className="wd-assignment-list-item">
-          <a href="#/Kambaz/Courses/1234/Assignments/134"
-             className="wd-assignment-link" >
-            Q2 - CSS + BOOTSTRAP
-          </a><br/>
-          <b>Not available until</b> May 14 at 12:00am | <b>Due</b> May 21 at 11:59pm | 25pts
-        </li>
-        <li className="wd-assignment-list-item">
-          <a href="#/Kambaz/Courses/1234/Assignments/135"
-             className="wd-assignment-link" >
-            Q3 - JAVASCRIPT + REACT
-          </a><br/>
-          <b>Not available until</b> May 21 at 12:00am | <b>Due</b> May 28 at 11:59pm | 25pts
-        </li>
-      </ul>
-      <h3 id="wd-assignments-title">
-        EXAMS 10% of Total <button>+</button> </h3>
-      <ul id="wd-assignment-list">
-        <li className="wd-assignment-list-item">
-          <a href="#/Kambaz/Courses/1234/Assignments/143"
-             className="wd-assignment-link" >
-            MIDTERM
-          </a><br/>
-          <b>Not available until</b> May 8 at 12:00am | <b>Due</b> May 15 at 11:59pm | 25pts
-        </li>
-        <li className="wd-assignment-list-item">
-          <a href="#/Kambaz/Courses/1234/Assignments/144"
-             className="wd-assignment-link" >
-            FINAL
-          </a><br/>
-          <b>Not available until</b> May 15 at 12:00am | <b>Due</b> May 22 at 11:59pm | 25pts
-        </li>
-      </ul>
-      <h3 id="wd-assignments-title">
-        PROJECT 40% of Total <button>+</button> </h3>
-      <ul id="wd-assignment-list">
-        <li className="wd-assignment-list-item">
-          <a href="#/Kambaz/Courses/1234/Assignments/123"
-             className="wd-assignment-link" >
-            SEMESTER PROJECT
-          </a><br/>
-          Multiple Modules | <b>Not available until</b> May 9 at 12:00am | <b>Due</b> May 16 at 11:59pm | 100pts
-        </li>
-      </ul>
+    <div>
+      <AssignmentsControls /><br />
+      <ListGroup className="rounded-0"  id="wd-assignments">
+        <ListGroup.Item className="wd-module p-0 mb-5 fs-5 border-gray">
+          <div className="wd-title p-3 ps-2 bg-secondary">
+            <BsGripVertical className="me-2 fs-3" />
+            ASSIGNMENTS
+            <AssignCatControlButtons />
+          </div>
+          <ListGroup className="wd-lessons rounded-0">
+            <ListGroup.Item className="wd-lesson p-3 ps-1">
+              <Row className="align-items-center">
+                <Col xs={2}>
+                  <BsGripVertical className="me-2 fs-3" />
+                  <Button size="lg" variant="tertiary" href="#/Kambaz/Courses/1234/Assignments/123"><LuNotebookPen /></Button>
+                </Col>
+                <Col xs={8}>
+                  <h3>A1 - ENV + HTML</h3>
+                  Multiple Modules | <b>Not available until</b> May 6 at 12:00am | <b>Due</b> May 13 at 11:59pm | 100pts
+                </Col>
+                <Col xs={2}><AssgnControlButtons /></Col>
+              </Row>
+            </ListGroup.Item>
+            <ListGroup.Item className="wd-lesson p-3 ps-1">
+              <Row className="align-items-center">
+                <Col xs={2}>
+                  <BsGripVertical className="me-2 fs-3" />
+                  <Button size="lg" variant="tertiary" href="#/Kambaz/Courses/1234/Assignments/124"><LuNotebookPen /></Button>
+                </Col>
+                <Col xs={8}>
+                  <h3>A2 - CSS + BOOTSTRAP</h3>
+                  Multiple Modules | <b>Not available until</b> May 13 at 12:00am | <b>Due</b> May 20 at 11:59pm | 100pts
+                </Col>
+                <Col xs={2}><AssgnControlButtons /></Col>
+              </Row>
+            </ListGroup.Item>
+            <ListGroup.Item className="wd-lesson p-3 ps-1">
+              <Row className="align-items-center">
+                <Col xs={2}>
+                  <BsGripVertical className="me-2 fs-3" />
+                  <Button size="lg" variant="tertiary" href="#/Kambaz/Courses/1234/Assignments/125"><LuNotebookPen /></Button>
+                </Col>
+                <Col xs={8}>
+                  <h3>A3 - JAVASCRIPT + REACT</h3>
+                  Multiple Modules | <b>Not available until</b> May 20 at 12:00am | <b>Due</b> May 27 at 11:59pm | 100pts
+                </Col>
+                <Col xs={2}><AssgnControlButtons /></Col>
+              </Row>
+            </ListGroup.Item>
+          </ListGroup>
+        </ListGroup.Item>
+        <ListGroup.Item className="wd-module p-0 mb-5 fs-5 border-gray">
+          <div className="wd-title p-3 ps-2 bg-secondary">
+            <BsGripVertical className="me-2 fs-3" />
+            QUIZZES
+            <AssignCatControlButtons />
+          </div>
+          <ListGroup className="wd-lessons rounded-0">
+            <ListGroup.Item className="wd-lesson p-3 ps-1">
+              <Row className="align-items-center">
+                <Col xs={2}>
+                  <BsGripVertical className="me-2 fs-3" />
+                  <Button size="lg" variant="tertiary" href="#/Kambaz/Courses/1234/Assignments/133"><LuNotebookPen /></Button>
+                </Col>
+                <Col xs={8}>
+                  <h3>Q1 - ENV + HTML</h3>
+                  <b>Not available until</b> May 7 at 12:00am | <b>Due</b> May 14 at 11:59pm | 25pts
+                </Col>
+                <Col xs={2}><AssgnControlButtons /></Col>
+              </Row>
+            </ListGroup.Item>
+            <ListGroup.Item className="wd-lesson p-3 ps-1">
+              <Row className="align-items-center">
+                <Col xs={2}>
+                  <BsGripVertical className="me-2 fs-3" />
+                  <Button size="lg" variant="tertiary" href="#/Kambaz/Courses/1234/Assignments/134"><LuNotebookPen /></Button>
+                </Col>
+                <Col xs={8}>
+                  <h3>Q2 - CSS + BOOTSTRAP</h3>
+                  <b>Not available until</b> May 14 at 12:00am | <b>Due</b> May 21 at 11:59pm | 25pts
+                </Col>
+                <Col xs={2}><AssgnControlButtons /></Col>
+              </Row>
+            </ListGroup.Item>
+            <ListGroup.Item className="wd-lesson p-3 ps-1">
+              <Row className="align-items-center">
+                <Col xs={2}>
+                  <BsGripVertical className="me-2 fs-3" />
+                  <Button size="lg" variant="tertiary" href="#/Kambaz/Courses/1234/Assignments/135"><LuNotebookPen /></Button>
+                </Col>
+                <Col xs={8}>
+                  <h3>Q3 - JAVASCRIPT + REACT</h3>
+                  <b>Not available until</b> May 21 at 12:00am | <b>Due</b> May 28 at 11:59pm | 25pts
+                </Col>
+                <Col xs={2}><AssgnControlButtons /></Col>
+              </Row>
+            </ListGroup.Item>
+          </ListGroup>
+        </ListGroup.Item>
+        <ListGroup.Item className="wd-module p-0 mb-5 fs-5 border-gray">
+          <div className="wd-title p-3 ps-2 bg-secondary">
+            <BsGripVertical className="me-2 fs-3" />
+            EXAMS
+            <AssignCatControlButtons />
+          </div>
+          <ListGroup className="wd-lessons rounded-0">
+            <ListGroup.Item className="wd-lesson p-3 ps-1">
+              <Row className="align-items-center">
+                <Col xs={2}>
+                  <BsGripVertical className="me-2 fs-3" />
+                  <Button size="lg" variant="tertiary" href="#/Kambaz/Courses/1234/Assignments/143"><LuNotebookPen /></Button>
+                </Col>
+                <Col xs={8}>
+                  <h3>MIDTERM</h3>
+                  <b>Not available until</b> May 8 at 12:00am | <b>Due</b> May 15 at 11:59pm | 25pts
+                </Col>
+                <Col xs={2}><AssgnControlButtons /></Col>
+              </Row>
+            </ListGroup.Item>
+            <ListGroup.Item className="wd-lesson p-3 ps-1">
+              <Row className="align-items-center">
+                <Col xs={2}>
+                  <BsGripVertical className="me-2 fs-3" />
+                  <Button size="lg" variant="tertiary" href="#/Kambaz/Courses/1234/Assignments/144"><LuNotebookPen /></Button>
+                </Col>
+                <Col xs={8}>
+                  <h3>FINAL</h3>
+                  <b>Not available until</b> May 15 at 12:00am | <b>Due</b> May 22 at 11:59pm | 25pts
+                </Col>
+                <Col xs={2}><AssgnControlButtons /></Col>
+              </Row>
+            </ListGroup.Item>
+          </ListGroup>
+        </ListGroup.Item>
+        <ListGroup.Item className="wd-module p-0 mb-5 fs-5 border-gray">
+          <div className="wd-title p-3 ps-2 bg-secondary">
+            <BsGripVertical className="me-2 fs-3" />
+            PROJECT
+            <AssignCatControlButtons />
+          </div>
+          <ListGroup className="wd-lessons rounded-0">
+            <ListGroup.Item className="wd-lesson p-3 ps-1">
+              <Row className="align-items-center">
+                <Col xs={2}>
+                  <BsGripVertical className="me-2 fs-3" />
+                  <Button size="lg" variant="tertiary" href="#/Kambaz/Courses/1234/Assignments/153"><LuNotebookPen /></Button>
+                </Col>
+                <Col xs={8}>
+                  <h3>SEMESTER PROJECT</h3>
+                  Multiple Modules | <b>Not available until</b> May 9 at 12:00am | <b>Due</b> May 16 at 11:59pm | 100pts
+                </Col>
+                <Col xs={2}><AssgnControlButtons /></Col>
+              </Row>
+            </ListGroup.Item>
+          </ListGroup>
+        </ListGroup.Item>
+      </ListGroup>
     </div>
 );}

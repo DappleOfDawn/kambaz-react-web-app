@@ -151,6 +151,8 @@ tag to tell browsers to render the gaps.
 
           <input type="radio" name="radio-genre" id="wd-radio-fantasy"/>
           <label htmlFor="wd-radio-fantasy">Fantasy</label>
+          <input type="radio" name="check-genre" id="wd-test-this" />
+          <label htmlFor="wd-test-this">Fantasy</label>
 
           <h5 id="wd-checkboxes">Checkboxes</h5>
           <label>Favorite movie genre:</label><br/>
@@ -193,6 +195,7 @@ tag to tell browsers to render the gaps.
           <label htmlFor="wd-text-fields-email"> Email: </label>
           <input type="email"
                 placeholder="jdoe@somewhere.com"
+                title="email here"
                 id="wd-text-fields-email"/><br/>
 
           <label htmlFor="wd-text-fields-salary-start"> Starting salary:</label>
