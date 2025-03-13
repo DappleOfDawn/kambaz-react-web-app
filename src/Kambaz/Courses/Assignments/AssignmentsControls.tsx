@@ -1,8 +1,11 @@
 import { Button, Col, FormControl, InputGroup, Row } from "react-bootstrap";
 import { BsPlus, BsSearch } from "react-icons/bs";
-import "../../styles.css"
+import "../../styles.css";
+import { useLocation, useNavigate } from "react-router";
 
 export default function AssignmentsControls() {
+  const { pathname } = useLocation();
+  const navigate = useNavigate();
   return (
     <Row id="wd-assignments-controls" className="text-nowrap">
       <Col>
@@ -16,7 +19,7 @@ export default function AssignmentsControls() {
           <BsPlus className="position-relative fs-2" />
           Group
         </Button>
-        <Button id="wd-add-assignment" size="lg" variant="danger" className="wd-assgn-control-button">
+        <Button id="wd-add-assignment" size="lg" variant="danger" className="wd-assgn-control-button" onClick={() => navigate(`${pathname}/newAssignment`)}>
           <BsPlus className="position-relative fs-2" />
           Assignment
         </Button>

@@ -10,10 +10,11 @@ import Zoom from "./Zoom";
 import Piazza from "./Piazza";
 import { FaAlignJustify } from "react-icons/fa6";
 import PeopleTable from "./People/table";
-import { courses } from "../Database";
+import { useSelector } from "react-redux";
 
 export default function Courses() {
   const { cid } = useParams();
+  const { courses } = useSelector((state: any) => state.coursesReducer);
   const course = courses.find((course) => course._id === cid);
   const { pathname } = useLocation();
 
