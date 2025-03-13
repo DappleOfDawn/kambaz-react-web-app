@@ -24,7 +24,7 @@ export default function Assignments() {
             <AssignCatControlButtons />
           </div>
           <ListGroup className="wd-lessons rounded-0">
-            {assignments.filter(a => a.course === cid).map(a => (
+            {assignments.filter((a: any) => a.course === cid).map((a: any) => (
               <ListGroup.Item className="wd-lesson p-3 ps-1" key={a._id}>
                 <Row className="align-items-center">
                   <Col xs={2}>

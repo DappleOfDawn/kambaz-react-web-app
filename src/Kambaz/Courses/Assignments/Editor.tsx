@@ -1,6 +1,6 @@
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import "../../styles.css"
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 // import * as db from "../../Database";
 import { addAssignment, updateAssignment } from "./reducer";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,11 +8,10 @@ import { useState } from "react";
 
 export default function AssignmentEditor() {
   const { cid, aid } = useParams();
-  const { pathname } = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { assignments } = useSelector((state: any) => state.assignmentsReducer);
-  const [assignment, setAssignment] = useState<any>(aid !== 'newAssignment' ? assignments.find(a => a.course === cid && a._id === aid) : {
+  const [assignment, setAssignment] = useState<any>(aid !== 'newAssignment' ? assignments.find((a: any) => a.course === cid && a._id === aid) : {
     _id: "newAssignment",
     title: "New Assignment",
     course: cid,
