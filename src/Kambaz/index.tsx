@@ -6,12 +6,16 @@ import Courses from "./Courses";
 import "./styles.css";
 import ProtectedRoute from "./Account/ProtectedRoute";
 import Session from "./Account/Session";
+/*
 import * as userClient from "./Account/client";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import * as courseClient from "./Courses/client";
+*/
 
 export default function Kambaz() {
+  // We don't handle the courses here so I'm not sure why this was included in the assignment
+  /*
   const [course, setCourse] = useState<any>({});
   const [courses, setCourses] = useState<any[]>([]);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -42,7 +46,7 @@ export default function Kambaz() {
   useEffect(() => {
     fetchCourses();
   }, [currentUser]);
-
+  */
   return (
     <Session>
       <div id="wd-kambaz">
