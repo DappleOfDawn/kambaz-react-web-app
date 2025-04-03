@@ -43,12 +43,7 @@ export default function Dashboard() {
       <hr />
       <div id="wd-dashboard-courses" className="row">
       <div className="row row-cols-1 row-cols-md-5 g-4">
-        {courses.filter((course: any) =>
-          showAllCourses || (enrollments.some(
-            (enrollment: any) =>
-              enrollment.user === currentUser._id &&
-              enrollment.course === course._id
-            ))).map((course: any) => (
+        {courses.map((course: any) => (
             <div className="wd-dashboard-course col" style={{ width: "300px" }} key={course._id}>
               <div className="card rounded-3 overflow-hidden">
                 <Link onClick={(e) => protectCourse(e, course._id)} to={`/Kambaz/Courses/${course._id}/Home`}
