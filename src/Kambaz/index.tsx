@@ -36,8 +36,8 @@ export default function Kambaz() {
     setCourses(courses.map((c) => {
         if (c._id === course._id) { return course; }
         else { return c; }
-    })
-  );
+    }));
+  };
 
   useEffect(() => {
     fetchCourses();
