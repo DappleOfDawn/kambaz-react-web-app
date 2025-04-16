@@ -9,7 +9,7 @@ import Quizzes from "./Quizzes";
 import Zoom from "./Zoom";
 import Piazza from "./Piazza";
 import { FaAlignJustify } from "react-icons/fa6";
-import PeopleTable from "./People/table";
+import PeopleTable from "./People/Table";
 import { useSelector } from "react-redux";
 
 export default function Courses() {
