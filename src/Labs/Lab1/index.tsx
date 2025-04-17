@@ -223,9 +223,11 @@ tag to tell browsers to render the gaps.
       to get dummy text<br/>
       <h1>TODO: ADD GITHUB LINK HERE</h1>
       Please
-      <a href="https://github.com/DappleOfDawn/kambaz-react-web-app" id="wd-github">click here</a>
-      to visit my github repo<br/>
-
+      <a href="https://github.com/DappleOfDawn/kambaz-react-web-app" id="wd-github">{" click here "}</a>
+      to visit my github repo for the react web app<br/>
+      Please
+      <a href="https://github.com/DappleOfDawn/kambaz-node-server-app" id="wd-github">{" click here "}</a>
+      to visit my github repo for the node server app<br/>
 
     </div>
 );}
