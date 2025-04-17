@@ -18,9 +18,9 @@ export default function Courses({ courses }: { courses: any[] }) {
   const course = courses.find((course: any) => course._id === cid);
   const { pathname } = useLocation();
   const [users, setUsers] = useState<any[]>([]);
-  const [assignments, setAssignments] = useState<any[]>([]);
-  const [assignment, setAssignment] = useState<any>({});
-
+  // const [assignments, setAssignments] = useState<any[]>([]);
+  // const [assignment, setAssignment] = useState<any>({});
+  /*
   const findAssignmentById = async (assignmentId: string) => {
     try {
       const assignmentById = await courseClient.findAssignmentById(cid!, assignmentId);
@@ -52,6 +52,7 @@ export default function Courses({ courses }: { courses: any[] }) {
     const status = await courseClient.deleteAssignment(cid!, assignmentId);
     setAssignments(assignments.filter((a) => a._id !== assignmentId));
   }
+  */
 
   useEffect(() => {
     const findUsersForCourse = async () => {
@@ -62,18 +63,18 @@ export default function Courses({ courses }: { courses: any[] }) {
         console.error(error);
       }
     }
-    const findAssignmentsForCourse = async () => {
-      try {
-        const assignmentsForCourse = await courseClient.findAssignmentsForCourse(course._id);
-        setAssignments(assignmentsForCourse);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    // const findAssignmentsForCourse = async () => {
+    //   try {
+    //     const assignmentsForCourse = await courseClient.findAssignmentsForCourse(course._id);
+    //     setAssignments(assignmentsForCourse);
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // }
 
     if (cid) {
       findUsersForCourse();
-      findAssignmentsForCourse();
+      // findAssignmentsForCourse();
     }
   }, [cid, course]);
 
