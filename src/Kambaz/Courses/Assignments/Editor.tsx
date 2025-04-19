@@ -1,33 +1,49 @@
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import "../../styles.css"
 import { useNavigate, useParams } from "react-router";
-// import * as db from "../../Database";
-import { addAssignment, updateAssignment } from "./reducer";
-import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useEffect } from "react";
+import * as courseClient from "../client";
 
-export default function AssignmentEditor() {
+export default function AssignmentEditor({
+  assignment,
+  setAssignment,
+  assignments,
+  setAssignments,
+}: {
+  assignment: any,
+  setAssignment: (assignment: any) => void,
+  assignments: any[],
+  setAssignments: (assignments: any[]) => void,
+}) {
   const { cid, aid } = useParams();
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
-  const [assignment, setAssignment] = useState<any>(aid !== 'newAssignment' ? assignments.find((a: any) => a.course === cid && a._id === aid) : {
-    _id: "newAssignment",
-    title: "New Assignment",
-    course: cid,
-    description: "New Assignment Description",
-    points: 100,
-    dueDate: new Date().toDateString(),
-    anvailableDate: new Date().toDateString(),
-    untilDate: new Date().toDateString(),
-  });
   const unsavedAssignment = assignment;
 
-  const saveAssignment = () => {
+  const addNewAssignment = async () => {
+    try {
+      const newAssignment = await courseClient.createAssignment(cid!);
+      setAssignment(newAssignment);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const updateAssignment = async () => {
+    try {
+      await courseClient.updateAssignment(cid!, assignment);
+      setAssignments(assignments.map((a) => {
+        if (a._id === assignment._id) { return assignment; }
+        else { return a; }
+      }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const saveAssignment = async () => {
     if (aid === 'newAssignment') {
-      dispatch(addAssignment(assignment));
+      await addNewAssignment();
     } else {
-      dispatch(updateAssignment(assignment));
+      await updateAssignment();
     }
     navigate(-1);
   }
@@ -37,6 +53,23 @@ export default function AssignmentEditor() {
     navigate(-1);
   }
 
+  useEffect(() => {
+    const findAssignmentById = async (assignmentId: string) => {
+      try {
+        const assignmentById = await courseClient.findAssignmentById(cid!, assignmentId);
+        setAssignment(assignmentById);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (aid !== 'newAssignment') {
+      findAssignmentById(aid!);
+    } else {
+      setAssignment({ title: 'New Assignment' });
+    }
+  }, [aid, cid, setAssignment]);
+
   return (
     <div id="wd-assignments-editor">
       {assignment && aid ?
@@ -45,14 +78,29 @@ export default function AssignmentEditor() {
             <Row><Form.Label htmlFor="wd-name">
               Assignment Name
             </Form.Label></Row>
-            <Row className="mb-3"><Form.Control defaultValue={assignment.title} onChange={(e) => setAssignment({...assignment, title: e.target.value})}/></Row>
-            <Row className="mb-4"><Form.Control defaultValue={assignment.description} as="textarea" onChange={(e) => setAssignment({...assignment, description: e.target.value})}/></Row>
+            <Row className="mb-3">
+              <Form.Control
+                defaultValue={assignment.title}
+                placeholder={'Assignment Title'}
+                onChange={(e) => setAssignment({...assignment, title: e.target.value})}/>
+            </Row>
+            <Row className="mb-4">
+              <Form.Control
+                defaultValue={assignment.description}
+                placeholder={'Assignment Description'}
+                as="textarea"
+                onChange={(e) => setAssignment({...assignment, description: e.target.value})}/>
+            </Row>
           </Form.Group>
           <Form.Group as={Row} className="m-3">
             <Form.Label column sm={4} align="right" className="wd-assgn-editor-fl">
               Points
             </Form.Label>
-            <Col sm={8}><Form.Control defaultValue={assignment.points} onChange={(e) => setAssignment({...assignment, points: Number(e.target.value)})}/></Col>
+            <Col sm={8}>
+              <Form.Control
+                defaultValue={assignment.points}
+                onChange={(e) => setAssignment({...assignment, points: Number(e.target.value)})}/>
+            </Col>
           </Form.Group>
           <Form.Group as={Row} className="m-3">
             <Form.Label column sm={4} align="right" className="wd-assgn-editor-fl">
@@ -62,15 +110,25 @@ export default function AssignmentEditor() {
               <Card>
                 <Col className="m-3">
                   <Form.Label>Assign To</Form.Label>
-                  <Form.Control type="date" className="mb-3" defaultValue={assignment.dueDate} onChange={(e) => setAssignment({...assignment, dueDate: e.target.value})}/>
+                  <Form.Control
+                    type="date"
+                    className="mb-3"
+                    defaultValue={assignment.dueDate}
+                    onChange={(e) => setAssignment({...assignment, dueDate: e.target.value})}/>
                   <Row>
                     <Col>
                       <Form.Label>Available From</Form.Label>
-                      <Form.Control type="date" defaultValue={assignment.availableDate} onChange={(e) => setAssignment({...assignment, availableDate: e.target.value})}/>
+                      <Form.Control
+                        type="date"
+                        defaultValue={assignment.availableDate}
+                        onChange={(e) => setAssignment({...assignment, availableDate: e.target.value})}/>
                     </Col>
                     <Col>
                       <Form.Label>Until</Form.Label>
-                      <Form.Control type="date" defaultValue={assignment.untilDate} onChange={(e) => setAssignment({...assignment, untilDate: e.target.value})}/>
+                      <Form.Control
+                        type="date"
+                        defaultValue={assignment.untilDate}
+                        onChange={(e) => setAssignment({...assignment, untilDate: e.target.value})}/>
                     </Col>
                   </Row>
                 </Col>

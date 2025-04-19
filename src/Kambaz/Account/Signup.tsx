@@ -19,6 +19,7 @@ export default function Signup() {
              className="wd-username form-control mb-2" placeholder="username" />
       <input value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} type="password"
              className="wd-password form-control mb-2" placeholder="password" />
+      <input type="checkbox" className="wd-user-check form-control mb-2" onChange={() => }
       <button onClick={signup} className="wd-signup-btn btn btn-primary mb-2 w-100"> Sign up </button><br />
       <Link to="/Kambaz/Account/Signin" className="wd-signin-link">Sign in</Link>
     </div>

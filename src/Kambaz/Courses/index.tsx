@@ -18,65 +18,38 @@ export default function Courses({ courses }: { courses: any[] }) {
   const course = courses.find((course: any) => course._id === cid);
   const { pathname } = useLocation();
   const [users, setUsers] = useState<any[]>([]);
-  // const [assignments, setAssignments] = useState<any[]>([]);
-  // const [assignment, setAssignment] = useState<any>({});
-  /*
-  const findAssignmentById = async (assignmentId: string) => {
-    try {
-      const assignmentById = await courseClient.findAssignmentById(cid!, assignmentId);
-      setAssignment(assignmentById);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const addNewAssignment = async () => {
-    try {
-      const newAssignment = await courseClient.createAssignment(cid!);
-      setAssignment(newAssignment);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const updateAssignment = async () => {
-    try {
-      await courseClient.updateAssignment(cid!, assignment);
-      setAssignments(assignments.map((a) => {
-        if (a._id === assignment._id) { return assignment; }
-        else { return a; }
-      }));
-    } catch (error) {
-      console.error(error);
-    }
-  }
+  const [assignments, setAssignments] = useState<any[]>([]);
+  const [assignment, setAssignment] = useState<any>({});
+
   const deleteAssignment = async (assignmentId: string) => {
-    const status = await courseClient.deleteAssignment(cid!, assignmentId);
+    await courseClient.deleteAssignment(cid!, assignmentId);
     setAssignments(assignments.filter((a) => a._id !== assignmentId));
   }
-  */
+  
 
   useEffect(() => {
     const findUsersForCourse = async () => {
       try {
-        const usersForCourse = await courseClient.findUsersForCourse(course._id);
+        const usersForCourse = await courseClient.findUsersForCourse(cid!);
         setUsers(usersForCourse);
       } catch (error) {
         console.error(error);
       }
     }
-    // const findAssignmentsForCourse = async () => {
-    //   try {
-    //     const assignmentsForCourse = await courseClient.findAssignmentsForCourse(course._id);
-    //     setAssignments(assignmentsForCourse);
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // }
+    const findAssignmentsForCourse = async () => {
+      try {
+        const assignmentsForCourse = await courseClient.findAssignmentsForCourse(cid!);
+        setAssignments(assignmentsForCourse);
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     if (cid) {
       findUsersForCourse();
-      // findAssignmentsForCourse();
+      findAssignmentsForCourse();
     }
-  }, [cid, course]);
+  }, [cid]);
 
   return (
     <div id="wd-courses">
@@ -94,8 +67,18 @@ export default function Courses({ courses }: { courses: any[] }) {
             <Route path="/" element={<Navigate to="Home" />} />
             <Route path="Home" element={<Home />} />
             <Route path="Modules" element={<Modules />} />
-            <Route path="Assignments" element={<Assignments />} />
-            <Route path="Assignments/:aid" element={<AssignmentEditor />} />
+            <Route path="Assignments" element={
+              <Assignments
+                assignments={assignments}
+                deleteAssignment={deleteAssignment}
+              />} />
+            <Route path="Assignments/:aid" element={
+              <AssignmentEditor
+                assignment={assignment}
+                setAssignment={setAssignment}
+                assignments={assignments}
+                setAssignments={setAssignments}
+              />} />
             <Route path="People" element={<PeopleTable users={users}/>} />
             <Route path="Grades" element={<Grades />} />
             <Route path="Quizzes" element={<Quizzes />} />

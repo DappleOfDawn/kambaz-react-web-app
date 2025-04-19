@@ -5,13 +5,10 @@ import AssignCatControlButtons from "./AssignCatControlButtons";
 import AssgnControlButtons from "./AssgnControlButtons";
 import { LuNotebookPen } from "react-icons/lu";
 import { useLocation, useParams } from "react-router";
-// import * as db from "../../Database";
-import { useSelector } from "react-redux";
 
-export default function Assignments() {
+export default function Assignments({ assignments, deleteAssignment }: { assignments: any[], deleteAssignment: (assignmentId: string) => Promise<void> }) {
   const { cid } = useParams();
   const { pathname } = useLocation();
-  const { assignments } = useSelector((state: any) => state.assignmentsReducer);
 
   return (
     <div>
@@ -32,7 +29,7 @@ export default function Assignments() {
                     <Button size="lg" variant="tertiary" href={`#${pathname}/${a._id}`}><LuNotebookPen /></Button>
                   </Col>
                   <Col xs={8}><h3>{a.title}</h3></Col>
-                  <Col xs={2}><AssgnControlButtons assignmentId={a._id}/></Col>
+                  <Col xs={2}><AssgnControlButtons assignmentId={a._id} deleteAssignment={deleteAssignment}/></Col>
                 </Row>
               </ListGroup.Item>
             ))}
