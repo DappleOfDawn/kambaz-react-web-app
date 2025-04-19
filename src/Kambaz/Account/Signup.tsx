@@ -5,9 +5,11 @@ import { useDispatch } from "react-redux";
 import { setCurrentUser } from "./reducer";
 export default function Signup() {
   const [user, setUser] = useState<any>({});
+  const [isFaculty, setIsFaculty] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const signup = async () => {
+    setUser({ ...user, role: isFaculty ? 'FACULTY' : 'USER' });
     const currentUser = await client.signup(user);
     dispatch(setCurrentUser(currentUser));
     navigate("/Kambaz/Account/Profile");
@@ -19,7 +21,8 @@ export default function Signup() {
              className="wd-username form-control mb-2" placeholder="username" />
       <input value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} type="password"
              className="wd-password form-control mb-2" placeholder="password" />
-      <input type="checkbox" className="wd-user-check form-control mb-2" onChange={() => }
+      <input checked={isFaculty} onChange={() => setIsFaculty(!isFaculty)} type="checkbox"
+             className="wd-user-check mb-2" /> Are you a faculty member?
       <button onClick={signup} className="wd-signup-btn btn btn-primary mb-2 w-100"> Sign up </button><br />
       <Link to="/Kambaz/Account/Signin" className="wd-signin-link">Sign in</Link>
     </div>
