@@ -36,12 +36,6 @@ export default function KambazNavigation() {
           {link.label}
         </Link>
       ))}
-      <br />
-      <br />
-      <br />
-      <p className="list-group-item bg-black border-0 text-center text-white">
-        Created by: Thomas McIninch
-      </p>
       <a href="https://github.com/DappleOfDawn/kambaz-react-web-app" className="list-group-item bg-black border-0 text-center text-white">
         <LiaCogSolid className="text-white fs-1" />
         <br />
@@ -52,5 +46,9 @@ export default function KambazNavigation() {
         <br />
         Server Repo
       </a>
+      <br />
+      <p className="list-group-item bg-black border-0 text-center text-white">
+        Created by: Thomas McIninch
+      </p>
     </div>
 );}
