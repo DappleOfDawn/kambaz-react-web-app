@@ -10,17 +10,18 @@ import * as userClient from "./Account/client";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import * as courseClient from "./Courses/client";
+import { Course } from "./types";
 
 export default function Kambaz() {
-  const [course, setCourse] = useState<any>({});
-  const [courses, setCourses] = useState<any[]>([]);
+  const [course, setCourse] = useState<Course>({});
+  const [courses, setCourses] = useState<Course[]>([]);
   const { currentUser } = useSelector((state: any) => state.accountReducer);
   const [enrolling, setEnrolling] = useState<boolean>(false);
 
   //CRUD courses
   const addNewCourse = async () => {
     const newCourse = await courseClient.createCourse(course);
-    setCourses([ ...courses, newCourse ]);
+    setCourses([ ...courses, { ...newCourse, enrolled: true } ]);
   };
   const deleteCourse = async (courseId: string) => {
     await courseClient.deleteCourse(courseId);
@@ -56,7 +57,7 @@ export default function Kambaz() {
     const findCoursesForUser = async () => {
       try {
         const courses = await userClient.findCoursesForUser(currentUser._id);
-        setCourses(courses);
+        setCourses(courses.map((c: Course) => { return { ...c, enrolled: true };}));
       } catch (error) {
         console.error(error);
       }
@@ -64,14 +65,12 @@ export default function Kambaz() {
     const fetchCourses = async () => {
       try {
         const allCourses = await courseClient.fetchAllCourses();
-        const enrolledCourses = await userClient.findCoursesForUser(
-          currentUser._id
-        );
-        const courses = allCourses.map((course: any) => {
-          if (enrolledCourses.find((c: any) => c._id === course._id)) {
+        const enrolledCourses = await userClient.findCoursesForUser(currentUser._id);
+        const courses = allCourses.map((course: Course) => {
+          if (enrolledCourses.find((c: Course) => c._id === course._id)) {
             return { ...course, enrolled: true };
           } else {
-            return course;
+            return { ...course, enrolled: false };
           }
         });
         setCourses(courses);

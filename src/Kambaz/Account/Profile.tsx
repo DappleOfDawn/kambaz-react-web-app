@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrentUser } from "./reducer";
 import * as client from "./client";
+import { Role, User } from "../types";
 
 export default function Profile() {
-  const [profile, setProfile] = useState<any>({});
+  const [profile, setProfile] = useState<User>({username: '', password: ''});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { currentUser } = useSelector((state: any) => state.accountReducer);
@@ -39,11 +40,11 @@ export default function Profile() {
                        onChange={(e) => setProfile({ ...profile, firstName: e.target.value })}/>
           <FormControl defaultValue={profile.lastName} id="wd-lastname" className="mb-2"
                        onChange={(e) => setProfile({ ...profile, lastName:  e.target.value })}/>
-          <FormControl defaultValue={profile.dob} id="wd-dob" className="mb-2"
-                       onChange={(e) => setProfile({ ...profile, dob: e.target.value })} type="date"/>
+          <FormControl defaultValue={profile.dob?.toString()} id="wd-dob" className="mb-2"
+                       onChange={(e) => setProfile({ ...profile, dob: new Date(e.target.value) })} type="date"/>
           <FormControl defaultValue={profile.email} id="wd-email" className="mb-2"
                        onChange={ (e) => setProfile({ ...profile, email: e.target.value })}/>
-          <select onChange={(e) => setProfile({ ...profile, role:  e.target.value })}
+          <select onChange={(e) => setProfile({ ...profile, role:  (e.target.value as Role) })}
                  className="form-control mb-2" id="wd-role" value={profile.role}>
             <option value="USER">User</option>            <option value="ADMIN">Admin</option>
             <option value="FACULTY">Faculty</option>      <option value="STUDENT">Student</option>

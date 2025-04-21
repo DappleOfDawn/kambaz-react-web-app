@@ -3,26 +3,27 @@ import { Link, useNavigate } from "react-router-dom";
 import * as client from "./client";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "./reducer";
+import { User } from "../types";
+
 export default function Signup() {
-  const [user, setUser] = useState<any>({});
-  const [isFaculty, setIsFaculty] = useState<boolean>(false);
+  const [user, setUser] = useState<User>({ username: '', password: '', role: 'STUDENT'});
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const signup = async () => {
-    setUser({ ...user, role: isFaculty ? 'FACULTY' : 'USER' });
     const currentUser = await client.signup(user);
     dispatch(setCurrentUser(currentUser));
     navigate("/Kambaz/Account/Profile");
   };
+
   return (
     <div className="wd-signup-screen">
       <h1>Sign up</h1>
-      <input value={user.username} onChange={(e) => setUser({ ...user, username: e.target.value })}
+      <input onChange={(e) => setUser({ ...user, username: e.target.value })}
              className="wd-username form-control mb-2" placeholder="username" />
-      <input value={user.password} onChange={(e) => setUser({ ...user, password: e.target.value })} type="password"
+      <input onChange={(e) => setUser({ ...user, password: e.target.value })} type="password"
              className="wd-password form-control mb-2" placeholder="password" />
-      <input checked={isFaculty} onChange={() => setIsFaculty(!isFaculty)} type="checkbox"
-             className="wd-user-check mb-2" /> Are you a faculty member?
+      <input onChange={() => setUser({ ...user, role: user.role === 'STUDENT' ? 'FACULTY' : 'STUDENT' })} type="checkbox"
+             className="wd-user-check mb-2" checked={user.role === 'FACULTY'} /> Are you a faculty member?
       <button onClick={signup} className="wd-signup-btn btn btn-primary mb-2 w-100"> Sign up </button><br />
       <Link to="/Kambaz/Account/Signin" className="wd-signin-link">Sign in</Link>
     </div>

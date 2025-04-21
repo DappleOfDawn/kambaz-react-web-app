@@ -12,14 +12,38 @@ import { FaAlignJustify } from "react-icons/fa6";
 import PeopleTable from "./People/Table";
 import { useEffect, useState } from "react";
 import * as courseClient from "./client";
+import { Assignment, Course, Quiz, User } from "../types";
+import QuizDetails from "./Quizzes/Details";
+import QuizEditor from "./Quizzes/Editor";
 
-export default function Courses({ courses }: { courses: any[] }) {
+export default function Courses({ courses }: { courses: Course[] }) {
   const { cid } = useParams();
-  const course = courses.find((course: any) => course._id === cid);
+  const course = courses.find((course: Course) => course._id === cid);
   const { pathname } = useLocation();
-  const [users, setUsers] = useState<any[]>([]);
-  const [assignments, setAssignments] = useState<any[]>([]);
-  const [assignment, setAssignment] = useState<any>({});
+  const [users, setUsers] = useState<User[]>([]);
+  const [assignments, setAssignments] = useState<Assignment[]>([]);
+  const [assignment, setAssignment] = useState<Assignment>({});
+  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [quiz, setQuiz] = useState<Quiz>({
+    title: 'New Quiz',
+    course: cid!,
+    quizType: "GRADED QUIZ",
+    assignmentGroup: "QUIZZES",
+    points: 0,
+    shuffleAnswers: true,
+    timeLimit: 20,
+    multipleAttempts: false,
+    numberOfAttempts: 1,
+    showCorrectAnswers: "Immediately",
+    accessCode: "",
+    oneQuestionAtATime: true,
+    webcamRequired: false,
+    lockQuestionsAfterAnswering: false,
+    dueDate: new Date(),
+    availableDate: new Date(),
+    untilDate: new Date(),
+    published: false,
+  });
 
   const deleteAssignment = async (assignmentId: string) => {
     await courseClient.deleteAssignment(cid!, assignmentId);
@@ -44,10 +68,19 @@ export default function Courses({ courses }: { courses: any[] }) {
         console.error(error);
       }
     }
+    const findQuizzesForCourse = async () => {
+      try {
+        const quizzesForCourse = await courseClient.findQuizzesForCourse(cid!);
+        setQuizzes(quizzesForCourse);
+      } catch (error) {
+        console.error(error);
+      }
+    }
 
     if (cid) {
       findUsersForCourse();
       findAssignmentsForCourse();
+      findQuizzesForCourse();
     }
   }, [cid]);
 
@@ -81,7 +114,23 @@ export default function Courses({ courses }: { courses: any[] }) {
               />} />
             <Route path="People" element={<PeopleTable users={users}/>} />
             <Route path="Grades" element={<Grades />} />
-            <Route path="Quizzes" element={<Quizzes />} />
+            <Route path="Quizzes" element={
+              <Quizzes
+                quizzes={quizzes}
+                setQuizzes={setQuizzes}
+              />} />
+            <Route path="Quizzes/:qid" element={
+              <QuizDetails
+                quiz={quiz}
+                setQuiz={setQuiz}
+              />} />
+            <Route path="Quizzes/:qid/editing" element={
+              <QuizEditor
+                quiz={quiz}
+                setQuiz={setQuiz}
+                quizzes={quizzes}
+                setQuizzes={setQuizzes}
+              />} />
             <Route path="Zoom" element={<Zoom />} />
             <Route path="Piazza" element={<Piazza />} />
           </Routes>

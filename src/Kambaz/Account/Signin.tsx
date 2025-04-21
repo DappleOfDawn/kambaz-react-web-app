@@ -4,9 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { setCurrentUser } from "./reducer";
 import { useDispatch } from "react-redux";
 import * as client from "./client";
+import { UserCredentials } from "../types";
 
 export default function Signin() {
-  const [credentials, setCredentials] = useState<any>({});
+  const [credentials, setCredentials] = useState<UserCredentials>({username: '', password: ''});
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const signin = async () => {

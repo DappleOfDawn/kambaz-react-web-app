@@ -4,12 +4,13 @@ import PeopleTable from "../Courses/People/Table";
 import * as client from "./client";
 import { FormControl } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
+import { Role, User } from "../types";
 
 export default function Users() {
-  const [users, setUsers] = useState<any[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const { uid } = useParams();
-  const [role, setRole] = useState("");
-  const [name, setName] = useState("");
+  const [role, setRole] = useState<string>("");
+  const [name, setName] = useState<string>("");
 
   const fetchUsers = async () => {
     const users = await client.findAllUsers();
@@ -32,7 +33,7 @@ export default function Users() {
   const filterUsersByRole = async (role: string) => {
     setRole(role);
     if (role) {
-      const users = await client.findUsersByRole(role);
+      const users = await client.findUsersByRole(role as Role);
       setUsers(users);
     } else {
       fetchUsers();

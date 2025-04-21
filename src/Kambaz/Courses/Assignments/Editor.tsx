@@ -3,6 +3,7 @@ import "../../styles.css"
 import { useNavigate, useParams } from "react-router";
 import { useEffect } from "react";
 import * as courseClient from "../client";
+import { Assignment } from "../../types";
 
 export default function AssignmentEditor({
   assignment,
@@ -10,10 +11,10 @@ export default function AssignmentEditor({
   assignments,
   setAssignments,
 }: {
-  assignment: any,
-  setAssignment: (assignment: any) => void,
-  assignments: any[],
-  setAssignments: (assignments: any[]) => void,
+  assignment: Assignment,
+  setAssignment: (assignment: Assignment) => void,
+  assignments: Assignment[],
+  setAssignments: (assignments: Assignment[]) => void,
 }) {
   const { cid, aid } = useParams();
   const navigate = useNavigate();
@@ -113,22 +114,22 @@ export default function AssignmentEditor({
                   <Form.Control
                     type="date"
                     className="mb-3"
-                    defaultValue={assignment.dueDate}
-                    onChange={(e) => setAssignment({...assignment, dueDate: e.target.value})}/>
+                    defaultValue={assignment.dueDate?.toString()}
+                    onChange={(e) => setAssignment({...assignment, dueDate: new Date(e.target.value)})}/>
                   <Row>
                     <Col>
                       <Form.Label>Available From</Form.Label>
                       <Form.Control
                         type="date"
-                        defaultValue={assignment.availableDate}
-                        onChange={(e) => setAssignment({...assignment, availableDate: e.target.value})}/>
+                        defaultValue={assignment.availableDate?.toString()}
+                        onChange={(e) => setAssignment({...assignment, availableDate: new Date(e.target.value)})}/>
                     </Col>
                     <Col>
                       <Form.Label>Until</Form.Label>
                       <Form.Control
                         type="date"
-                        defaultValue={assignment.untilDate}
-                        onChange={(e) => setAssignment({...assignment, untilDate: e.target.value})}/>
+                        defaultValue={assignment.untilDate?.toString()}
+                        onChange={(e) => setAssignment({...assignment, untilDate: new Date(e.target.value)})}/>
                     </Col>
                   </Row>
                 </Col>

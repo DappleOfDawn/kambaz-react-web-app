@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import { FaCheck, FaUserCircle } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
 import { useParams, useNavigate } from "react-router";
-// import { Link } from "react-router-dom";
 import * as client from "../../Account/client";
 import { FaPencil } from "react-icons/fa6";
 import { FormControl } from "react-bootstrap";
+import { User } from "../../types";
 
 export default function PeopleDetails() {
   const { uid } = useParams();
-  const [user, setUser] = useState<any>({});
-  const [name, setName] = useState("");
-  const [editing, setEditing] = useState(false);
+  const [user, setUser] = useState<User>({username: '', password: ''});
+  const [name, setName] = useState<string>("");
+  const [editing, setEditing] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const deleteUser = async (uid: string) => {
@@ -21,7 +21,7 @@ export default function PeopleDetails() {
 
   const saveUser = async () => {
     const [firstName, lastName] = name.split(" ");
-    const updatedUser = { ...user, firstName, lastName };
+    const updatedUser = { ...user!, firstName, lastName };
     await client.updateUser(updatedUser);
     setUser(updatedUser);
     setEditing(false);

@@ -5,8 +5,11 @@ import AssignCatControlButtons from "./AssignCatControlButtons";
 import AssgnControlButtons from "./AssgnControlButtons";
 import { LuNotebookPen } from "react-icons/lu";
 import { useLocation, useParams } from "react-router";
+import { Assignment } from "../../types";
+import { useSelector } from "react-redux";
 
-export default function Assignments({ assignments, deleteAssignment }: { assignments: any[], deleteAssignment: (assignmentId: string) => Promise<void> }) {
+export default function Assignments({ assignments, deleteAssignment }: { assignments: Assignment[], deleteAssignment: (assignmentId: string) => Promise<void> }) {
+  const { currentUser } = useSelector((state: any) => state.accountReducer);
   const { cid } = useParams();
   const { pathname } = useLocation();
 
@@ -21,15 +24,16 @@ export default function Assignments({ assignments, deleteAssignment }: { assignm
             <AssignCatControlButtons />
           </div>
           <ListGroup className="wd-lessons rounded-0">
-            {assignments.filter((a: any) => a.course === cid).map((a: any) => (
+            {assignments.filter((a: Assignment) => a.course === cid).map((a: Assignment) => (
               <ListGroup.Item className="wd-lesson p-3 ps-1" key={a._id}>
                 <Row className="align-items-center">
                   <Col xs={2}>
                     <BsGripVertical className="me-2 fs-3" />
-                    <Button size="lg" variant="tertiary" href={`#${pathname}/${a._id}`}><LuNotebookPen /></Button>
+                    {currentUser.role === "FACULTY" &&
+                      <Button size="lg" variant="tertiary" href={`#${pathname}/${a._id}`}><LuNotebookPen /></Button>}
                   </Col>
                   <Col xs={8}><h3>{a.title}</h3></Col>
-                  <Col xs={2}><AssgnControlButtons assignmentId={a._id} deleteAssignment={deleteAssignment}/></Col>
+                  <Col xs={2}><AssgnControlButtons assignmentId={a._id!} deleteAssignment={deleteAssignment}/></Col>
                 </Row>
               </ListGroup.Item>
             ))}
