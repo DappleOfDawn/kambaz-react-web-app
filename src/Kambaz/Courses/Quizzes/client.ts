@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Question, Quiz } from "../../types";
+import { Quiz } from "../../types";
 
 const axiosWithCredentials = axios.create({ withCredentials: true });
 const REMOTE_SERVER = import.meta.env.VITE_REMOTE_SERVER;
@@ -21,11 +21,3 @@ export const updateQuiz = async (quiz: Quiz): Promise<Quiz> => {
   const { data } = await axiosWithCredentials.put(`${QUIZZES_API}/${quiz._id}`, quiz);
   return data;
 };
-export const findQuestionsForQuiz = async (quizId: string): Promise<Question[]> => {
-  const { data } = await axiosWithCredentials.get(`${QUIZZES_API}/${quizId}/questions`);
-  return data;
-};
-export const findMostRecentScore = async (quizId: string, userId: string): Promise<Number> => {
-  const { data } = await axiosWithCredentials.get(`${QUIZZES_API}/${quizId}/users/${userId}`);
-  return data;
-}

@@ -55,6 +55,32 @@ export type AssignmentGroup = "QUIZZES" | "EXAMS" | "ASSIGNMENTS" | "PROJECT";
 
 export type ShowCorrectAnswersOptions = "Immediately" | "No" | "After Due Date";
 
+export type QuestionType = "MULTIPLE CHOICE" | "TRUE FALSE" | "FILL IN THE BLANK";
+
+export interface Answer {
+  _id: string;
+  question: string;
+  answer: string;
+  correct: boolean;
+}
+
+export interface Question {
+  _id: string;
+  title: string;
+  questionText: string;
+  questionType: QuestionType;
+  points: number;
+  answers: Answer[];
+}
+
+export interface Submission {
+  _id: string;
+  user: string;
+  answers: Answer[];
+  score: number;
+  submittedOn: Date;
+}
+
 export interface Quiz {
   _id?: string;
   title: string;
@@ -76,18 +102,6 @@ export interface Quiz {
   availableDate: Date;
   untilDate: Date;
   published: boolean;
-  completed?: boolean;
-}
-
-export type QuestionType = "MULTIPLE CHOICE" | "TRUE FALSE" | "FILL IN THE BLANK";
-
-export interface Question {
-  _id?: string;
-  title: string;
-  quiz: string;
-  questionText: string;
-  questionType: QuestionType;
-  points: number;
-  answers: string[];
-  correctAnswers: string[];
+  questions: Question[];
+  submissions: Submission[];
 }

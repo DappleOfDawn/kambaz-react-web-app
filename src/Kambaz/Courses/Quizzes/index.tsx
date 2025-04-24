@@ -1,5 +1,5 @@
 import { Col, ListGroup, Row } from "react-bootstrap";
-import { Quiz } from "../../types";
+import { Quiz, Submission } from "../../types";
 import { BsCaretDownFill } from "react-icons/bs";
 import { RxRocket } from "react-icons/rx";
 import * as quizClient from "./client";
@@ -24,21 +24,23 @@ export default function Quizzes({ quizzes, setQuizzes }: { quizzes: Quiz[], setQ
     return `Not available until ${new Date(quiz.availableDate).toDateString()}`;
   };
 
-  const getNumberOfQuestions = async (qid: string): Promise<Number> => {
-    const questions = await quizClient.findQuestionsForQuiz(qid);
-    return questions.length;
+  const userHasCompletedQuiz = (quiz: Quiz): boolean => {
+    return quiz.submissions.filter((s: Submission) => s.user === currentUser._id).length > 0;
   };
-  const getRecentScore = async (qid: string): Promise<Number> => {
-    const score = await quizClient.findMostRecentScore(qid, currentUser._id);
-    return score;
+  const getRecentScore = (quiz: Quiz): number => {
+    const sortedSubmissions = quiz.submissions
+    .filter((s: Submission) => s.user === currentUser._id)
+    .sort((a: Submission, b: Submission) => new Date(a.submittedOn).getTime() - new Date(b.submittedOn).getTime());
+    return sortedSubmissions[0].score;
   };
   const deleteQuiz = async (qid: string): Promise<void> => {
     await quizClient.deleteQuiz(qid);
+    setQuizzes(quizzes.filter((q: Quiz) => q._id !== qid));
   };
   const handlePublish = async (quiz: Quiz): Promise<void> => {
     try {
-      const updatedQuiz = {...quiz, published: !quiz.published};
-      await quizClient.updateQuiz(updatedQuiz);
+      const publishedQuiz = {...quiz, published: !quiz.published};
+      const updatedQuiz = await quizClient.updateQuiz(publishedQuiz);
       setQuizzes(quizzes.map((q) => {
         if (q._id === updatedQuiz._id) return updatedQuiz;
         return q;
@@ -72,8 +74,8 @@ export default function Quizzes({ quizzes, setQuizzes }: { quizzes: Quiz[], setQ
                         {`${availibility(q)}`}
                         {` | Due ${new Date(q.dueDate).toDateString()}`}
                         {` | ${q.points} pts`}
-                        {` | ${getNumberOfQuestions(q._id!)} Questions`}
-                        {currentUser.role === "STUDENT" && q.completed ? ` | ${getRecentScore(q._id!)}/${q.points} pts` : ''}</p></Row>
+                        {` | ${q.questions.length} Questions`}
+                        {currentUser.role === "STUDENT" && userHasCompletedQuiz(q) ? ` | ${getRecentScore(q)}/${q.points} pts` : ''}</p></Row>
                     </Col>
                     <Col xs={1} className="align-items-center">
                       <QuizControlButtons quiz={q} deleteQuiz={deleteQuiz} handlePublish={handlePublish}/>

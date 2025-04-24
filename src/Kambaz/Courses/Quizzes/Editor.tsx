@@ -1,109 +1,155 @@
 import { useEffect, useState } from "react";
-import { AssignmentGroup, Question, QuestionType, Quiz, QuizType, ShowCorrectAnswersOptions } from "../../types";
-import { useNavigate, useParams } from "react-router-dom";
+import { Answer, AssignmentGroup, Question, QuestionType, Quiz, QuizType, ShowCorrectAnswersOptions } from "../../types";
+import { useLocation, useNavigate, useParams } from "react-router";
 import * as quizClient from "./client";
 import { Button, Col, Form, ListGroup, ListGroupItem, Modal, ModalBody, ModalFooter, ModalHeader, Row } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
+import { v4 as uuidv4 } from "uuid";
 
 export default function QuizEditor({
   quiz,
   setQuiz,
   quizzes,
   setQuizzes,
+  defaultQuiz,
 }: {
   quiz: Quiz,
   setQuiz: (quiz: Quiz) => void,
   quizzes: Quiz[],
   setQuizzes: (quizzes: Quiz[]) => void,
+  defaultQuiz: Quiz,
 }) {
   const { qid } = useParams();
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const unsavedQuiz = quiz;
   const [onDetailsPage, setOnDetailsPage] = useState<boolean>(true);
-  const [editingQuestion, setEditingQuestion] = useState<Question>();
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [editingQuestion, setEditingQuestion] = useState<boolean>();
   const defaultQuestion = {
+    _id: '',
     title: 'New Question',
-    quiz: qid!,
     questionText: '',
     questionType: 'MULTIPLE CHOICE',
     points: 0,
     answers: [],
-    correctAnswers: [],
   } as Question;
   const [question, setQuestion] = useState<Question>(defaultQuestion);
   const [unsavedQuestion, setUnsavedQuestion] = useState<Question>(defaultQuestion);
+  const [newQuestion, setNewQuestion] = useState<boolean>(true);
+
+  // utility
+  const formatDate = (date: Date) => {
+    const splitDate = date.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/');
+    return `${splitDate[2]}-${splitDate[0]}-${splitDate[1]}`;
+  };
+  const backToQuizzes = () => {
+    const pathArray = pathname.split('/');
+    const quizzesIndex = pathArray.indexOf('Quizzes');
+    return pathArray.slice(0, quizzesIndex+1).join('/');
+  };
 
   // quiz CRUD
   const cancelQuiz = () => {
     setQuiz(unsavedQuiz);
-    navigate(-1);
+    setQuestion(defaultQuestion);
+    navigate(backToQuizzes());
   };
-  const addNewQuiz = async () => {
+  const addNewQuiz = async (quizToAdd: Quiz) => {
     try {
-      const newQuiz = await quizClient.createQuiz(quiz);
+      const newQuiz = await quizClient.createQuiz(quizToAdd);
       setQuiz(newQuiz);
       setQuizzes([...quizzes, newQuiz]);
     } catch (error) {
       console.error(error);
     }
   };
-  const updateQuiz = async () => {
+  const updateQuiz = async (quizToUpdate: Quiz) => {
     try {
-      await quizClient.updateQuiz(quiz);
+      const updatedQuiz = await quizClient.updateQuiz(quizToUpdate);
+      setQuiz(updatedQuiz)
       setQuizzes(quizzes.map((q: Quiz) => {
-        if (q._id === quiz._id) { return quiz; }
+        if (q._id === updatedQuiz._id) { return updatedQuiz; }
         else { return q; }
       }));
     } catch (error) {
       console.error(error);
     }
   };
-  const saveQuiz = async () => {
+  const saveQuiz = async (publish: boolean) => {
+    const updatedQuiz = {...quiz, published: publish ? true : quiz.published};
     if (qid === 'newQuiz') {
-      await addNewQuiz();
+      await addNewQuiz(updatedQuiz);
     } else {
-      await updateQuiz();
+      await updateQuiz(updatedQuiz);
     }
-    navigate(-1);
-  };
-  const saveAndPublish = async () => {
-    setQuiz({...quiz, published: true});
-    await saveQuiz();
+    navigate(backToQuizzes());
   };
 
-  const openQuestion = (question: Question) => {
-    setQuestion(question);
-    setEditingQuestion(question);
-    setUnsavedQuestion(question);
+  // questions
+  const openQuestion = (question: Question, newQuestion: boolean) => {
+    const newId = uuidv4();
+    setNewQuestion(newQuestion);
+    setQuestion(newQuestion ? {...question, _id: newId} : question);
+    setEditingQuestion(true);
+    setUnsavedQuestion(newQuestion ? {...question, _id: newId} : question);
   };
   const cancelQuestion = () => {
     setQuestion(unsavedQuestion);
-    setEditingQuestion(undefined);
+    setEditingQuestion(false);
   };
   const saveQuestion = () => {
-    setQuestions([...questions, question]);
+    if (newQuestion) {
+      setQuiz({...quiz, questions: [...quiz.questions, question]});
+    } else {
+      setQuiz({...quiz, questions: quiz.questions.map((q: Question) => {
+        if (q._id === question._id) { return question; }
+        else { return q; }
+      })});
+    }
     setEditingQuestion(undefined);
   };
-
-  const formatDate = (date: Date) => {
-    const splitDate = date.toLocaleString('en-US', {year: 'numeric', month: '2-digit', day: '2-digit'}).split('/');
-    return `${splitDate[2]}-${splitDate[0]}-${splitDate[1]}`;
+  const deleteQuestion = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, question: Question) => {
+    setQuiz({...quiz, questions: quiz.questions.filter((q: Question) => q._id !== question._id)});
+    event.preventDefault();
   };
+  const addAnswer = () => {
+    setQuestion({...question, answers: [...question.answers, {
+      _id: uuidv4(),
+      question: question._id,
+      answer: '',
+      correct: false,
+    }]});
+  };
+  const deleteAnswer = (answerId: string) => {
+    setQuestion({...question, answers: question.answers.filter((a: Answer) => a._id !== answerId)});
+  };
+  const updateAnswerText = (answerId: string, answerText: string) => {
+    setQuestion({...question, answers: question.answers.map((a: Answer) => {
+      if (a._id === answerId) return {...a, answer: answerText};
+      return a;
+    })});
+  };
+  const toggleAnswerCorrect = (answer: Answer, questionType: QuestionType) => {
+    setQuestion({...question, answers: question.answers.map((a: Answer) => {
+      if (a._id === answer._id) return {...a, correct: !answer.correct};
+      if (questionType !== "FILL IN THE BLANK" && a._id !== answer._id) return {...a, correct: false};
+      return a;
+    })});
+  };
+
 
   useEffect(() => {
     const findQuizById = async () => {
       const foundQuiz = await quizClient.findQuizById(qid!);
-      if (foundQuiz) setQuiz(foundQuiz);
-    };
-    const findQuestionsForQuiz = async () => {
-      const questionsForQuiz = await quizClient.findQuestionsForQuiz(qid!);
-      if (questionsForQuiz) setQuestions(questionsForQuiz);
+      if (foundQuiz) {
+        setQuiz(foundQuiz);
+      }
     };
 
     if (qid !== 'newQuiz') {
       findQuizById();
-      findQuestionsForQuiz();
+    } else {
+      setQuiz(defaultQuiz);
     }
   }, [qid]);
 
@@ -227,52 +273,49 @@ export default function QuizEditor({
           <Col sm={8}><Form.Control
             type="date"
             defaultValue={formatDate(new Date(quiz.dueDate))}
-            onChange={(e) => setQuiz({...quiz, dueDate: new Date(e.target.value)})}/></Col>
+            onChange={(e) => setQuiz({...quiz, dueDate: new Date(`${e.target.value}T00:00:00`)})}/></Col>
         </Form.Group>
         <Form.Group as={Row} className="m-3">
           <Form.Label column sm={4} align="right">Available From Date</Form.Label>
           <Col sm={8}><Form.Control
             type="date"
             defaultValue={formatDate(new Date(quiz.availableDate))}
-            onChange={(e) => setQuiz({...quiz, availableDate: new Date(e.target.value)})}/></Col>
+            onChange={(e) => setQuiz({...quiz, availableDate: new Date(`${e.target.value}T00:00:00`)})}/></Col>
         </Form.Group>
         <Form.Group as={Row} className="m-3">
           <Form.Label column sm={4} align="right">Available Until Date</Form.Label>
           <Col sm={8}><Form.Control
             type="date"
             defaultValue={formatDate(new Date(quiz.untilDate))}
-            onChange={(e) => setQuiz({...quiz, untilDate: new Date(e.target.value)})}/></Col>
+            onChange={(e) => setQuiz({...quiz, untilDate: new Date(`${e.target.value}T00:00:00`)})}/></Col>
         </Form.Group>
       </Form>
       : <Form>
         <ListGroup>
-          {questions.map((question) => (
-            <ListGroupItem>
+          {quiz.questions.map((question) => (
+            <ListGroupItem key={question._id} onClick={() => openQuestion(question, false)}>
               {question.title}
+              <Button variant="danger" className="float-end" onClick={(e) => deleteQuestion(e, question)}>Delete</Button>
             </ListGroupItem>
           ))}
         </ListGroup>
         <Modal show={editingQuestion ? true : false}>
           <ModalHeader>
-            <Form.Group>
-              <Form.Control
+            <Form.Group as={Row}>
+              <Col><Form.Control
                 defaultValue={question.title}
-                onChange={(e) => setQuestion({...question, title: e.target.value})} />
-              <Form.Select
+                onChange={(e) => setQuestion({...question, title: e.target.value})} /></Col>
+              <Col><Form.Select
                 defaultValue={question.questionType}
-                onChange={(e) => {
-                  setQuestion({...question, questionType: (e.target.value as QuestionType)});
-                  if (question.questionType === "TRUE FALSE") {
-                    setQuestion({...question, answers: ['True', 'False'], correctAnswers: ['True']});
-                  }
-                }}>
+                onChange={(e) => setQuestion({...question, questionType: (e.target.value as QuestionType), answers: []})}>
                 <option value={"MULTIPLE CHOICE"}>MULTIPLE CHOICE</option>
                 <option value={"TRUE FALSE"}>TRUE FALSE</option>
                 <option value={"FILL IN THE BLANK"}>FILL IN THE BLANK</option>
-              </Form.Select>
-              <div className="float-end">pts:<Form.Control
+              </Form.Select></Col>
+              <Col><Row><Col><Form.Label>Points:</Form.Label></Col>
+              <Col><Form.Control
                 defaultValue={question.points}
-                onChange={(e) => setQuestion({...question, points: Number(e.target.value)})}/></div>
+                onChange={(e) => setQuestion({...question, points: Number(e.target.value)})}/></Col></Row></Col>
             </Form.Group>
           </ModalHeader>
           <ModalBody>
@@ -282,33 +325,27 @@ export default function QuizEditor({
                 defaultValue={question.questionText}
                 onChange={(e) => setQuestion({...question, questionText: e.target.value})}/>
               Answers:
-              {question.answers.map((a: string, index: number) => (
-                <Row>
-                  <Col xs={4}>
+              {question.answers.map((a: Answer) => (
+                <Row key={a._id}>
+                  <Col xs={1}>
                     <Form.Check
-                      checked={question.correctAnswers.length > 0 && question.correctAnswers[0] === a}
-                      onChange={() => {
-                        if (question.correctAnswers[0] === a) { setQuestion({...question, correctAnswers: []}); }
-                        else { setQuestion({...question, correctAnswers: [a]}); }
-                      }}/>
+                      checked={a.correct}
+                      onChange={() => toggleAnswerCorrect(a, question.questionType)}/>
                   </Col>
-                  <Col xs={7}>
+                  <Col xs={8}>
                     <Form.Control
-                      defaultValue={a}
-                      onChange={(e) => {
-                        const answers = question.answers;
-                        answers.splice(index, 1, e.target.value);
-                        setQuestion({...question, answers: answers});
-                      }}/>
+                      defaultValue={a.answer}
+                      onChange={(e) => updateAnswerText(a._id, e.target.value)}/>
                   </Col>
                   <Col xs={1}>
-                    <Button variant="danger" onClick={() => setQuestion({...question,
-                      answers: question.answers.filter((answer) => answer === a),
-                      correctAnswers: question.correctAnswers.filter((answer) => answer === a),
-                    })}>Delete</Button>
+                    <Button variant="danger" onClick={() => deleteAnswer(a._id)}>Delete</Button>
                   </Col>
                 </Row>
               ))}
+              <br />
+              <Button variant="secondary" onClick={() => addAnswer()}>
+                <FaPlus /> Answer
+              </Button>
             </Form.Group>
           </ModalBody>
           <ModalFooter>
@@ -316,8 +353,9 @@ export default function QuizEditor({
             <Button variant="danger" onClick={() => saveQuestion()}>Save</Button>
           </ModalFooter>
         </Modal>
+        <br />
         <Form.Group as={Col}>
-          <Button variant="secondary" size="lg" onClick={() => openQuestion(defaultQuestion)}>
+          <Button variant="secondary" size="lg" onClick={() => openQuestion(defaultQuestion, true)}>
             <FaPlus /> New Question
           </Button>
         </Form.Group>
@@ -336,14 +374,14 @@ export default function QuizEditor({
             variant="secondary"
             size="lg"
             className="me-1"
-            onClick={() => saveQuiz()}>
+            onClick={() => saveQuiz(false)}>
             Save
           </Button>
           <Button
             variant="danger"
             size="lg"
             className="me-1"
-            onClick={() => saveAndPublish()}>
+            onClick={() => saveQuiz(true)}>
             Save & Publish
           </Button>
         </Form.Group>

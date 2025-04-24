@@ -24,7 +24,7 @@ export default function Courses({ courses }: { courses: Course[] }) {
   const [assignments, setAssignments] = useState<Assignment[]>([]);
   const [assignment, setAssignment] = useState<Assignment>({});
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [quiz, setQuiz] = useState<Quiz>({
+  const defaultQuiz = {
     title: 'New Quiz',
     course: cid!,
     quizType: "GRADED QUIZ",
@@ -43,7 +43,10 @@ export default function Courses({ courses }: { courses: Course[] }) {
     availableDate: new Date(),
     untilDate: new Date(),
     published: false,
-  });
+    questions: [],
+    submissions: [],
+  } as Quiz;
+  const [quiz, setQuiz] = useState<Quiz>(defaultQuiz);
 
   const deleteAssignment = async (assignmentId: string) => {
     await courseClient.deleteAssignment(cid!, assignmentId);
@@ -130,6 +133,7 @@ export default function Courses({ courses }: { courses: Course[] }) {
                 setQuiz={setQuiz}
                 quizzes={quizzes}
                 setQuizzes={setQuizzes}
+                defaultQuiz={defaultQuiz}
               />} />
             <Route path="Zoom" element={<Zoom />} />
             <Route path="Piazza" element={<Piazza />} />
